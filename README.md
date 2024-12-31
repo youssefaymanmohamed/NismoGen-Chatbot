@@ -15,7 +15,7 @@
 - [File Structure](#file-structure)
 - [Technologies Used](#technologies-used)
 - [Contributors](#contributors)
-- [License](#license)
+
 
 ## Introduction
 
