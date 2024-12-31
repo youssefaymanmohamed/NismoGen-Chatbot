@@ -35,7 +35,7 @@ To install and run the NismoGen-Chatbot, follow these steps:
 1. **Clone the repository**:
 
     ```sh
-    git clone https://github.com/your-username/NismoGen-Chatbot.git
+    git clone https://github.com/youssefaymanmohamed/NismoGen-Chatbot.git
     cd NismoGen-Chatbot
     ```
 
