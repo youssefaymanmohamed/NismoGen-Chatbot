@@ -1,0 +1,12 @@
+
+This CSV file contains user information with the following columns:
+- Name: The name of the user
+- Age: The age of the user
+- Email: The email address of the user
+
+Example of the data structure:
+Name, Age, Email
+Alice, 30, alice@example.com
+Bob, 25, bob@example.com
+Charlie, 35,
+Diana, 40,
