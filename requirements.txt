@@ -1,0 +1,11 @@
+streamlit==1.18.1
+langchain==0.0.208
+langchain-core==0.0.208
+langchain-google-genai==0.0.208
+langchain-huggingface==0.0.208
+langchain-community==0.0.208
+torch==2.0.1
+transformers==4.31.0
+speechrecognition==3.8.1
+pyttsx3==2.90
+pillow==10.0.0
