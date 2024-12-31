@@ -50,7 +50,9 @@ $RECYCLE.BIN/
 
 # un needed folders
 documents/
+
 # un needed files
+*.pdf
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode
 
