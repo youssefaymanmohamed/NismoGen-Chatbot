@@ -35,6 +35,10 @@ if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
 
 #==========================================Streamlit App=================================================
+# Add logo
+logo = Image.open("./documents/logo.png")
+st.image(logo, width=500)
+
 st.title("NismoGen")
 st.write("### AI Chatbot with Multimodal Capabilities")
 #=============================================Sidebar====================================================

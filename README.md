@@ -1,6 +1,6 @@
 # NismoGen-Chatbot
 
-
+![NismoGen Logo](./logo.png)
 
 ## Table of Contents
 
@@ -34,50 +34,47 @@ To install and run the NismoGen-Chatbot, follow these steps:
 
 1. **Clone the repository**:
 
-   ```sh
-   git clone https://github.com/your-username/NismoGen-Chatbot.git
-   cd NismoGen-Chatbot
-   ```
+    ```sh
+    git clone https://github.com/your-username/NismoGen-Chatbot.git
+    cd NismoGen-Chatbot
+    ```
 
 2. Create a virtual environment:
 
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
+    ```sh
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
 
 3. Install the required dependencies:
 
 4. Set up environment variables:
 
-   - Create a .env file in the Utils directory and add your API keys.
+    - Create a .env file in the Utils directory and add your API keys.
 
 ## Usage
 
 To run the NismoGen-Chatbot, use the following command:
 
-```
+```sh
 streamlit run chatbot_task.py
 ```
 
 ## Question Answering
 
 - Upload documents (PDF, CSV, TXT).
-
-* Select input method (Text or Audio).
-* Ask questions based on the uploaded documents.
+- Select input method (Text or Audio).
+- Ask questions based on the uploaded documents.
 
 ## Text Summarization
 
 - Enter text or upload a document.
-
-* Click "Summarize" to get a concise summary.
+- Click "Summarize" to get a concise summary.
 
 ## Image Captioning
 
 - Upload an image (JPG, JPEG, PNG).
-
-* Get an AI-generated caption for the image.
+- Get an AI-generated caption for the image.
 
 ## Audio Input and Output
 
@@ -113,6 +110,6 @@ NismoGen-Chatbot/
 - Pyttsx3: Text-to-speech conversion.
 
 ## Contributors
+
 - **Youssef Ayman**: [GitHub](https://github.com/youssefaymanmohamed) | [Email](mailto:youssefaymanmohamed1@gmail.com)
 - **Adham Ahmed**: [GitHub](https://github.com/adhamahmed46) | [Email](mailto:addham.taha@gmail.com)
-
