@@ -94,7 +94,7 @@ def init_prompt() -> tuple[ChatPromptTemplate, ChatPromptTemplate]: ##
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),
-            MessagesPlaceholder("chat_history"),
+            MessagesPlaceholder("chat_history"), # Placeholder for chat history
             ("human", "{input}"),
         ]
     )
@@ -120,7 +120,7 @@ def qa(text: str, qa_model: Runnable, messages: list) -> Generator[str, str, str
             chat_history.append(message["content"])
 
     try:
-        response = qa_model.invoke({"chat_history": chat_history, "input": text})
+        response = qa_model.invoke({"chat_history": chat_history, "input": text}) # Invoke the QA model with the chat history and the user input
         answer = response["answer"].strip()
     except Exception:
         return None
@@ -141,6 +141,6 @@ def init_gemini_model() -> ChatGoogleGenerativeAI:
 def gemini_generate_response(prompt_text: str, gemini_model: ChatGoogleGenerativeAI) -> str:
     """Generates response using the Gemini model."""
     # Ensure the prompt is wrapped in a HumanMessage
-    prompt_message = HumanMessage(content=prompt_text)
+    prompt_message = HumanMessage(content=prompt_text) # Wrap the prompt in a HumanMessage
     response = gemini_model([prompt_message])
     return response.content.strip()

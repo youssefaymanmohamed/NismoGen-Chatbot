@@ -1,7 +1,9 @@
 import PyPDF2
 import pandas as pd
 from streamlit.runtime.uploaded_file_manager import UploadedFile
-import time
+
+
+
 def read_text(uploaded_file: UploadedFile) -> str:
     """Reads a text file and returns its text content."""
     return uploaded_file.getvalue().decode("utf-8") # Read the file as a string

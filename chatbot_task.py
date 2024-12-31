@@ -1,7 +1,7 @@
 import streamlit as st
-import itertools
-import time
-import random
+# import itertools
+# import time
+# import random
 from langchain_core.runnables import Runnable
 from Utils.question_answering_RAG import (
     qa, init_llm_model, init_embeddings_model, create_vector_store, create_qa_model, init_prompt, gemini_generate_response, init_gemini_model
@@ -85,9 +85,9 @@ if task_name == "Question Answering":
     # Process uploaded files
     if uploaded_files:
         st.write("Processing files...")
-        st.session_state.vector_store = create_vector_store(uploaded_files, embedding_model)
-        st.session_state.qa_model = create_qa_model(
-            st.session_state.vector_store, llm_model, prompt, qa_prompt
+        st.session_state.vector_store = create_vector_store(uploaded_files, embedding_model) # Create a vector store from the uploaded files
+        st.session_state.qa_model = create_qa_model(  # Create the QA model
+            st.session_state.vector_store, llm_model, prompt, qa_prompt 
         )
         st.write("Files processed successfully!")
 
