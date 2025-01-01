@@ -50,7 +50,7 @@ To install and run the NismoGen-Chatbot, follow these steps:
 
 4. **Set up environment variables**:
 
-    - Create a .env file in the Utils directory and add your API keys.
+    - Create an .env file in the Utils directory and add your API keys.
 
 ## Usage
 
