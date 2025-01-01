@@ -19,7 +19,7 @@
 
 ## Introduction
 
-NismoGen is an advanced AI chatbot with multimodal capabilities, including text, audio, and image processing. It leverages state-of-the-art models for question answering, text summarization, and image captioning to provide accurate and insightful responses.
+NismoGen-ChatBot is an advanced AI chatbot with multimodal capabilities, including text, audio, and image processing. It leverages state-of-the-art models for question answering, text summarization, and image captioning to provide accurate and insightful responses.
 
 ## Features
 
@@ -39,16 +39,16 @@ To install and run the NismoGen-Chatbot, follow these steps:
     cd NismoGen-Chatbot
     ```
 
-2. Create a virtual environment:
+2. **Create a virtual environment**:
 
     ```sh
     python -m venv venv
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
-3. Install the required dependencies:
+3. **Install the required dependencies**:
 
-4. Set up environment variables:
+4. **Set up environment variables**:
 
     - Create a .env file in the Utils directory and add your API keys.
 
