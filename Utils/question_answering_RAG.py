@@ -6,8 +6,8 @@ from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.messages import HumanMessage
 from langchain_core.runnables import Runnable
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
 from Utils.utils import read_file
 from dotenv import dotenv_values, find_dotenv
@@ -51,18 +51,19 @@ def create_vector_store(
 
     for uploaded_file in uploaded_files:
         texts = read_file(uploaded_file)
-        all_split_texts.extend(split_text(texts))
+        split_texts = split_text(texts)
+        all_split_texts.extend(split_texts)
+        print(f"Processed {len(split_texts)} chunks from {uploaded_file.name}")
 
     return FAISS.from_texts(all_split_texts, embedding_model)
-
 
 def create_qa_model(
     vector_store: FAISS,
     llm: ChatGoogleGenerativeAI,
     prompt: ChatPromptTemplate,
-    qa_prompt: ChatPromptTemplate,
+    qa_prompt: ChatPromptTemplate
 ) -> Runnable:
-    """Initializes the QA model."""
+    """Initializes the QA model with memory."""
     history_aware_retriever = create_history_aware_retriever(
         llm, vector_store.as_retriever(kwargs={"k": 6}), qa_prompt
     )
@@ -71,7 +72,7 @@ def create_qa_model(
 
 
 
-def init_prompt() -> tuple[ChatPromptTemplate, ChatPromptTemplate]: ##
+def init_prompt() -> tuple[ChatPromptTemplate, ChatPromptTemplate]:
     """Initializes prompt templates."""
     qa_system_prompt = """
     Given the chat history and the latest user question, which might reference context in the chat history, 
@@ -94,7 +95,7 @@ def init_prompt() -> tuple[ChatPromptTemplate, ChatPromptTemplate]: ##
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),
-            MessagesPlaceholder("chat_history"), # Placeholder for chat history
+            MessagesPlaceholder("chat_history"),
             ("human", "{input}"),
         ]
     )
@@ -108,6 +109,22 @@ def init_prompt() -> tuple[ChatPromptTemplate, ChatPromptTemplate]: ##
 
     return prompt, qa_prompt
 
+def gemini_generate_response(prompt_text: str, gemini_model: ChatGoogleGenerativeAI, chat_history: list) -> str:
+    """Generates response using the Gemini model."""
+    # Ensure the prompt is wrapped in a HumanMessage
+    messages = [SystemMessage(content="You are a helpful assistant.")]  # Add a system message for context
+    
+    # Convert chat history to message objects
+    for message in chat_history:
+        if message["role"] == "user":
+            messages.append(HumanMessage(content=message["content"]))
+        elif message["role"] == "assistant":
+            messages.append(AIMessage(content=message["content"]))
+
+    messages.append(HumanMessage(content=prompt_text))  # Add the current user input
+
+    response = gemini_model(messages)
+    return response.content.strip()
 
 def qa(text: str, qa_model: Runnable, messages: list) -> Generator[str, str, str]:
     """Generates answers to questions based on the given text."""
@@ -117,17 +134,20 @@ def qa(text: str, qa_model: Runnable, messages: list) -> Generator[str, str, str
         if message["role"] == "user":
             chat_history.append(HumanMessage(content=message["content"]))
         elif message["role"] == "assistant":
-            chat_history.append(message["content"])
+            chat_history.append(AIMessage(content=message["content"]))
 
     try:
         response = qa_model.invoke({"chat_history": chat_history, "input": text}) # Invoke the QA model with the chat history and the user input
         answer = response["answer"].strip()
-    except Exception:
+        print(f"Retrieved answer: {answer}")
+    except Exception as e:
+        print(f"Error during QA model invocation: {e}")
         return None
 
     for word in answer.split(" "):
         yield word + " "
         time.sleep(0.1)
+
 
 def init_gemini_model() -> ChatGoogleGenerativeAI:
     """Initializes the Gemini model."""
@@ -138,9 +158,19 @@ def init_gemini_model() -> ChatGoogleGenerativeAI:
 
 
 
-def gemini_generate_response(prompt_text: str, gemini_model: ChatGoogleGenerativeAI) -> str:
+def gemini_generate_response(prompt_text: str, gemini_model: ChatGoogleGenerativeAI, chat_history: list) -> str:
     """Generates response using the Gemini model."""
     # Ensure the prompt is wrapped in a HumanMessage
-    prompt_message = HumanMessage(content=prompt_text) # Wrap the prompt in a HumanMessage
-    response = gemini_model([prompt_message])
+    messages = [SystemMessage(content="You are a helpful assistant.")]  # Add a system message for context
+    
+    # Convert chat history to message objects
+    for message in chat_history:
+        if message["role"] == "user":
+            messages.append(HumanMessage(content=message["content"]))
+        elif message["role"] == "assistant":
+            messages.append(AIMessage(content=message["content"]))
+
+    messages.append(HumanMessage(content=prompt_text))  # Add the current user input
+
+    response = gemini_model(messages)
     return response.content.strip()

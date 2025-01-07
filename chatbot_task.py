@@ -1,16 +1,13 @@
 import streamlit as st
-# import itertools
-# import time
-# import random
 from langchain_core.runnables import Runnable
 from Utils.question_answering_RAG import (
     qa, init_llm_model, init_embeddings_model, create_vector_store, create_qa_model, init_prompt, gemini_generate_response, init_gemini_model
 )
-from Utils.summerization import summarize
+from Utils.summerization import summarize, summarize_pdf
 from Utils.Image_captioning import query
 from Utils.audio_input import listen
 from Utils.audio_output import speak
-from Utils.utils import read_file, read_text, read_pdf, read_csv, read_arxiv, read_markdown, get_file_extension , read_txt
+from Utils.utils import read_file, read_text, read_pdf, read_csv, read_arxiv, read_markdown, get_file_extension 
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 from PIL import Image
 
@@ -87,7 +84,7 @@ if task_name == "Question Answering":
         st.write("Processing files...")
         st.session_state.vector_store = create_vector_store(uploaded_files, embedding_model) # Create a vector store from the uploaded files
         st.session_state.qa_model = create_qa_model(  # Create the QA model
-            st.session_state.vector_store, llm_model, prompt, qa_prompt 
+            st.session_state.vector_store, llm_model, prompt, qa_prompt
         )
         st.write("Files processed successfully!")
 
@@ -157,7 +154,7 @@ elif task_name == "Normal Chatbot":
         response = ""
         with st.chat_message("assistant", avatar="🤖"):
             with st.spinner("Generating response..."):
-                response = gemini_generate_response(prompt_text, st.session_state.gemini_model)
+                response = gemini_generate_response(prompt_text, st.session_state.gemini_model, st.session_state.messages)
                 st.write(response)
 
         st.session_state.messages.append({"role": "assistant", "content": response})
@@ -182,7 +179,14 @@ elif task_name == "Text Summarization":
 
         try:
             if file_extension == ".pdf":
-                text = read_pdf(uploaded_file)
+                st.write("Processing PDF...")
+                summary = summarize_pdf(uploaded_file)
+                st.write("**Summary:**")
+                st.write(summary)
+
+                # Add Audio Output Button
+                if st.button("Play Summary Audio"):
+                    speak(summary)
             elif file_extension == ".csv":
                 text = read_csv(uploaded_file)
             elif file_extension == ".arxiv":
